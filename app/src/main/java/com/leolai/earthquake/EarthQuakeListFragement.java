@@ -35,6 +35,7 @@ public class EarthQuakeListFragement extends ListFragment {
 
     ArrayAdapter<Quake> aa;
     ArrayList<Quake> earthQuakes;
+    int minimumMagnitude = 0;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -126,7 +127,26 @@ public class EarthQuakeListFragement extends ListFragment {
     }
 
     private void addNewQuake(Quake newQuake) {
-        earthQuakes.add(newQuake);
-        aa.notifyDataSetChanged();
+        if (newQuake.getMagnitude() >= minimumMagnitude) {
+            earthQuakes.add(newQuake);
+            aa.notifyDataSetChanged();
+        }
+    }
+
+    public void setMinimumMagnitude(int mini) {
+        minimumMagnitude = mini;
+    }
+
+    public void clearAllQuakes() {
+        earthQuakes.removeAll(earthQuakes);
+        //aa.clear();
+        //aa.notifyDataSetChanged();
+        //setListAdapter(aa);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                aa.notifyDataSetChanged();
+            }
+        });
     }
 }
