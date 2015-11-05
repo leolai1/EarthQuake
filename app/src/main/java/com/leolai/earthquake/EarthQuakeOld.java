@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.leolai.earthquake.preference.FragementPreference;
-import com.leolai.earthquake.preference.UserPreferences;
-
-public class EarthQuake extends Activity {
+public class EarthQuakeOld extends Activity {
     private static final int SHOW_PREFERENCE = 1;
 
     private boolean updatedSelf = false;
@@ -27,12 +23,6 @@ public class EarthQuake extends Activity {
         setContentView(R.layout.activity_earth_quake);
 
         mQuakeListFrag = (EarthQuakeListFragement) getFragmentManager().findFragmentById(R.id.earthquke_list_fragment_id);
-        //updateFromPreferences();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         updateFromPreferences();
     }
 
@@ -52,9 +42,7 @@ public class EarthQuake extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Class target = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-                    ? UserPreferences.class : FragementPreference.class;
-            Intent i = new Intent(this, target);
+            Intent i = new Intent(this, QuakePreferenceActivity.class);
             startActivityForResult(i, SHOW_PREFERENCE);
             return true;
         } else if (id == R.id.menu_fresh) {
@@ -70,20 +58,32 @@ public class EarthQuake extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == SHOW_PREFERENCE) {
-            //if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 updateFromPreferences();
                 refreshQuake();
-            //}
+            }
         }
     }
 
     private void updateFromPreferences() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Resources r = getResources();
+        String[] freqArray = r.getStringArray(R.array.update_freq_values);
+        String[] miniMagArray = r.getStringArray(R.array.mini_magnitude_values);
 
-        updatedSelf = pref.getBoolean(UserPreferences.PREF_AUTO_UPDATE, false);
-        updateFreq = Integer.parseInt(pref.getString(UserPreferences.PREF_UPDATE_FREQ, "5"));
-        int minimunMag = Integer.parseInt(pref.getString(UserPreferences.PREF_MINI_MAG, "2"));
+        updatedSelf = pref.getBoolean(QuakePreferenceActivity.PREF_AUTO_UPDATE, false);
+
+        int index = pref.getInt(QuakePreferenceActivity.PREF_UPDATE_FREQ, 0);
+        if (index < 0) {
+            index = 0;
+        }
+        updateFreq = Integer.valueOf(freqArray[index]);
+
+        index = pref.getInt(QuakePreferenceActivity.PREF_MINI_MAG, 0);
+        if (index < 0) {
+            index = 0;
+        }
+        int minimunMag = Integer.valueOf(miniMagArray[index]);
         mQuakeListFrag.setMinimumMagnitude(minimunMag);
     }
 

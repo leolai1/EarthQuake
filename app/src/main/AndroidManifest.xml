@@ -12,6 +12,7 @@
         <activity
             android:name=".EarthQuake"
             android:label="@string/app_name" >
+            <!--android:name=".EarthQuakeOld"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,9 +20,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PreferenceActivity"
+            android:name=".QuakePreferenceActivity"
             android:label="@string/title_activity_preference" >
         </activity>
+        <activity
+            android:name=".preference.UserPreferences"
+            android:label="@string/title_activity_preference" >
+        </activity>
+        <activity android:name=".preference.FragementPreference"/>
     </application>
 
 </manifest>

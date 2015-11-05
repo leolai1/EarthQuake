@@ -3,7 +3,6 @@ package com.leolai.earthquake;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 
-public class PreferenceActivity extends Activity implements View.OnClickListener {
+public class QuakePreferenceActivity extends Activity implements View.OnClickListener {
 
     public static final String PREF_AUTO_UPDATE = "pref_auto_update";
     public static final String PREF_UPDATE_FREQ = "pref_update_freq";
@@ -100,12 +99,12 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
         switch (viewId) {
             case R.id.okButton:
                 savePreferences();
-                PreferenceActivity.this.setResult(RESULT_OK);
+                QuakePreferenceActivity.this.setResult(RESULT_OK);
                 finish();
                 break;
             case R.id.cancelButton:
                 savePreferences();
-                PreferenceActivity.this.setResult(RESULT_CANCELED);
+                QuakePreferenceActivity.this.setResult(RESULT_CANCELED);
                 finish();
                 break;
             default:
